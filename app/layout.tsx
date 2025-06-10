@@ -51,11 +51,11 @@ export default function RootLayout({
           {/* header */}
           <Header />
           <main className="flex min-h-screen flex-col items-center justify-between p-24">
-          <BGPattern variant="dots" mask="fade-edges" size={24} fill="#252525" />
+          <BGPattern className="pointer-events-none" variant="dots" mask="fade-edges" size={24} fill="#252525" />
             {children}
           </main>
           {/* footer */}
-          <footer className=" w-full justify-center items-center">
+          <footer className="w-full justify-center items-center">
             <div className="container mx-auto px-4 py-6">
               <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
                 &copy; {new Date().getFullYear()} zira. All rights reserved.

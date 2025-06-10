@@ -6,18 +6,21 @@ import { PenBox } from 'lucide-react'
 import UserMenu from './user-menu'
 import { SparklesText } from './ui/sparkles-text'
 import { ModeToggle } from './ui/mode-toggle'
+import { checkUser } from '../lib/checkuser'
+import UserLoading from './user-loading'
 
-function Header() {
+async function Header() {
+      await checkUser()
   return (
     <header className='flex justify-between items-center p-4'>
       <nav className='flex items-center gap-4'>
-        <Link href="/" >
+        <Link className='' href="/" >
           <SparklesText text="zira" />
         </Link>
       </nav>
 
       <div className='flex items-center gap-4'>
-        <Link href="/onboarding">
+        <Link className='' href="/onboarding">
           <Button variant="destructive"
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           
@@ -37,6 +40,7 @@ function Header() {
           <UserMenu />
         </SignedIn>
       </div>
+      <UserLoading/>
     </header>
   )
 }
