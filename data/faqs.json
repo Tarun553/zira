@@ -1,0 +1,18 @@
+[
+  {
+    "question": "What is Zira?",
+    "answer": "Zira is a powerful project management tool designed to help teams organize, track, and manage their work efficiently. It combines intuitive design with robust features to streamline your workflow and boost productivity."
+  },
+  {
+    "question": "How do I get started with Zira?",
+    "answer": "Getting started with Zira is easy. Simply sign up for a free account, create a new project, and start adding your tasks. Our intuitive interface will guide you through the process."
+  },
+  {
+    "question": "Can I customize Zira to fit my team's needs?",
+    "answer": "Yes, Zira is highly customizable. You can create custom workflows, fields, and boards to match your team's specific processes. You can also integrate ZCRUM with other tools for a seamless experience."
+  },
+  {
+    "question": "Is Zira secure?",
+    "answer": "We take security very seriously at Zira. Your data is encrypted both in transit and at rest. We also offer features like two-factor authentication to keep your account secure."
+  }
+]
