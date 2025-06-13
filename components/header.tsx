@@ -20,7 +20,7 @@ async function Header() {
       </nav>
 
       <div className='flex items-center gap-4'>
-        <Link className='' href="/onboarding">
+        <Link className='' href="/project/create">
           <Button variant="destructive"
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           

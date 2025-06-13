@@ -2,7 +2,6 @@
 import { OrganizationList, useOrganization } from '@clerk/nextjs'
 import React, { useEffect } from 'react'
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 
 const Onboarding = () => {
     const { organization } = useOrganization();
@@ -15,7 +14,10 @@ const Onboarding = () => {
     return (
 
         <div className="flex justify-center items-center mb-10">
-            <OrganizationList hidePersonal />
+            <OrganizationList hidePersonal
+            afterCreateOrganizationUrl="/organization/:slug"
+            afterSelectOrganizationUrl="/organization/:slug"
+            />
         </div>
 
     )

@@ -16,7 +16,7 @@ function UserMenu() {
       <UserButton.MenuItems>
         <UserButton.Link label="my Organisation"
         labelIcon={<ChartNoAxesGantt/>}
-        href="/organisation"
+        href="/onboarding"
         />
        
       </UserButton.MenuItems>
