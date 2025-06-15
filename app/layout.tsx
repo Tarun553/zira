@@ -6,6 +6,7 @@ import Header from "@/components/header";
 import { ClerkProvider } from "@clerk/nextjs";
 import {dark} from "@clerk/themes"
 import {BGPattern} from "@/components/bg-pattern"
+import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -52,8 +53,10 @@ export default function RootLayout({
           <Header />
           <main className="flex min-h-screen flex-col items-center justify-between p-24">
           <BGPattern className="pointer-events-none" variant="dots" mask="fade-edges" size={24} fill="#252525" />
+
             {children}
           </main>
+          <Toaster richColors/>
           {/* footer */}
           <footer className="w-full justify-center items-center">
             <div className="container mx-auto px-4 py-6">
