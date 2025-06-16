@@ -10,11 +10,15 @@ const Organization = async ({ params }: { params: { orgId: string } }) => {
   let organization;
   try {
     organization = await getOrganization(params.orgId);
-  } catch (error: any) {
+  } catch (error) {
     // Log the error for server-side debugging
-    console.error(`Error fetching organization ${params.orgId}:`, error.message);
-    if (error.message === "Unauthorized") {
-      redirect('/sign-in'); // Adjust '/sign-in' if your sign-in path is different
+    if (error instanceof Error) {
+      console.error(`Error fetching organization ${params.orgId}:`, error.message);
+      if (error.message === "Unauthorized") {
+        redirect('/sign-in'); // Adjust '/sign-in' if your sign-in path is different
+      }
+    } else {
+      console.error(`An unknown error occurred while fetching organization ${params.orgId}:`, error);
     }
     // For other errors (e.g., "User not found", DB issues), re-throw to be caught by Next.js error handling
     throw error;
