@@ -53,11 +53,11 @@ export default function RootLayout({
           <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-background sm:hidden p-6 text-center animate-pulse">
             <h2 className="text-2xl font-extrabold text-red-500 flex items-center gap-2 select-none">
               <span className="whitespace-pre-line">
-               You're holding your phone wrong.
+               You&apos;re holding your phone wrong.
                 <br/>
                 Or maybe the developer is just lazy.
                 <br/>
-                It’s probably both.
+                It&apos;s probably both.
               </span>
             </h2>
             <p className="text-sm text-muted-foreground max-w-xs italic">
