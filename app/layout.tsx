@@ -49,13 +49,32 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* header */}
-          <Header />
-          <main className="flex min-h-screen flex-col items-center justify-between p-24">
-          <BGPattern className="pointer-events-none" variant="dots" mask="fade-edges" size={24} fill="#252525" />
+          {/* Mobile warning overlay (visible below 640px) */}
+          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-background sm:hidden p-6 text-center animate-pulse">
+            <h2 className="text-2xl font-extrabold text-red-500 flex items-center gap-2 select-none">
+              <span className="whitespace-pre-line">
+               You're holding your phone wrong.
+                <br/>
+                Or maybe the developer is just lazy.
+                <br/>
+                It’s probably both.
+              </span>
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-xs italic">
+              Rotate your device or grab something with a bigger screen to see the magic 🚀
+            </p>
+          </div>
 
-            {children}
-          </main>
+          {/* Site content (hidden on small screens) */}
+          <div className="hidden sm:block w-full">
+            {/* header */}
+            <Header />
+            <main className="flex min-h-screen flex-col items-center justify-between p-24">
+              <BGPattern className="pointer-events-none" variant="dots" mask="fade-edges" size={24} fill="#252525" />
+
+              {children}
+            </main>
+          </div>
           <Toaster richColors/>
           {/* footer */}
           <footer className="w-full justify-center items-center">

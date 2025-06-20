@@ -57,7 +57,7 @@ export default function Home() {
           An elegant platform designed to simplify complexity and boost productivity.
         </p>
         <div className="flex gap-4">
-          <Link href="/onboarding">
+          <Link href="/signin">
             <Button className="bg-primary text-primary-foreground hover:bg-primary/90">Get Started</Button>
           </Link>
           <Link href="#features">
