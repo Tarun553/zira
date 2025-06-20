@@ -5,4 +5,4 @@ function SignInPage() {
   return <SignIn />;
 }
 
-export default SignIn;
+export default SignInPage;

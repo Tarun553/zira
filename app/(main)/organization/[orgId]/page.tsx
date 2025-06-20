@@ -2,25 +2,46 @@
 
 import React from 'react';
 import { getOrganization } from '@/actions/organization';
+
+import { getIssuesByUser } from '@/actions/issues';
 import OrgSwitcher from '@/components/org-switcher';
 import { ProjectList } from './_components/project-list';
+import {UserIssues} from '../_components/user-issues';
 import { redirect } from 'next/navigation';
+import { auth } from '@clerk/nextjs/server';  
 
 const Organization = async ({ params }: { params: { orgId: string } }) => {
+  const { userId } = await auth();
+  if (!userId) {
+    redirect('/sign-in');
+  }
+
   let organization;
+  let assignedIssues = [];
+  let reportedIssues = [];
+
   try {
     organization = await getOrganization(params.orgId);
+    
+    // Fetch user's assigned and reported issues in parallel
+    const [assigned, reported] = await Promise.all([
+      getIssuesByUser({
+        organizationId: params.orgId,
+        assigneeId: userId,
+      }),
+      getIssuesByUser({
+        organizationId: params.orgId,
+        reporterId: userId,
+      })
+    ]);
+    
+    assignedIssues = assigned || [];
+    reportedIssues = reported || [];
   } catch (error) {
-    // Log the error for server-side debugging
-    if (error instanceof Error) {
-      console.error(`Error fetching organization ${params.orgId}:`, error.message);
-      if (error.message === "Unauthorized") {
-        redirect('/sign-in'); // Adjust '/sign-in' if your sign-in path is different
-      }
-    } else {
-      console.error(`An unknown error occurred while fetching organization ${params.orgId}:`, error);
+    console.error('Error in organization page:', error);
+    if (error instanceof Error && error.message === "Unauthorized") {
+      redirect('/sign-in');
     }
-    // For other errors (e.g., "User not found", DB issues), re-throw to be caught by Next.js error handling
     throw error;
   }
 
@@ -29,29 +50,31 @@ const Organization = async ({ params }: { params: { orgId: string } }) => {
   }
 
   return (
-    <>
-      <div className='container mx-auto'>
-        <div className='flex justify-between items-center mb-10'>
-          <h1>
-            <span
-              className="text-5xl font-extrabold tracking-tighter bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent select-none"
-              style={{ fontFamily: "'Geist', 'Inter', sans-serif", letterSpacing: '-0.03em' }}
-            >
-              {organization.name}’s Projects
-            </span>
-          </h1>
-          {/* org switcher */}
-          <OrgSwitcher />
-        </div>
+    <div className="container mx-auto px-4 py-8">
+      <div className='flex justify-between items-center mb-10'>
+        <h1>
+          <span
+            className="text-5xl font-extrabold tracking-tighter bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent select-none"
+            style={{ fontFamily: "'Geist', 'Inter', sans-serif", letterSpacing: '-0.03em' }}
+          >
+            {organization.name}&apos;s Projects
+          </span>
+        </h1>
+        <OrgSwitcher />
       </div>
-      <div className='mb-4'>
+      
+      <div className='mb-12'>
         <ProjectList orgId={organization.id} />
       </div>
 
-      <div className='mt-8'>show user assigned and reported issues</div>
-
-
-    </>
+      <div className='mt-12'>
+        <UserIssues 
+          assignedIssues={assignedIssues} 
+          reportedIssues={reportedIssues}
+          
+        />
+      </div>
+    </div>
   );
 };
 

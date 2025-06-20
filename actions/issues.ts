@@ -1,7 +1,9 @@
 // create issue action
+"use server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { db } from "../lib/prisma";
 import { IssueStatus, IssuePriority } from '@prisma/client';
+import { Prisma } from "@prisma/client";
 
 export async function getIssuesForSprint(sprintId: string) {
   const { userId, orgId } = await auth();
@@ -170,5 +172,56 @@ export async function updateIssue(issueId: string, data: { status: string, prior
       throw new Error("Error updating issue: " + error.message);
     }
     throw new Error("An unknown error occurred while updating issue");
+  }
+}
+
+export async function getIssuesByUser({
+  organizationId,
+  assigneeId,
+  reporterId,
+}: {
+  organizationId: string;
+  assigneeId?: string;
+  reporterId?: string;
+}) {
+  const { userId, orgId } = await auth();
+  if (!userId || !orgId) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    // Filter issues by the organization via the related Project model.
+    let where: Prisma.IssueWhereInput = {
+      project: {
+        is: {
+          organizationId,
+        },
+      },
+    };
+
+    if (assigneeId) {
+      where = { ...where, assigneeId };
+    }
+
+    if (reporterId) {
+      where = { ...where, reporterId };
+    }
+
+    const issues = await db.issue.findMany({
+      where,
+      include: {
+        assignee: true,
+        reporter: true,
+        project: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return issues;
+  } catch (error) {
+    console.error('Error fetching user issues:', error);
+    throw new Error('Failed to fetch issues');
   }
 }

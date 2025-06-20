@@ -97,3 +97,50 @@ export async function getOrganizationMembers(orgId: string) {
   });
   return users;
 }
+
+
+export async function getOrganizationUsers(orgId: string) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  const user = await db.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  if (!orgId) {
+    throw new Error("Organization Id is required");
+  }
+
+  const organizationMemberships =
+    await (await clerkClient()).organizations.getOrganizationMembershipList({
+      organizationId: orgId,
+    });
+
+  if (!organizationMemberships || !organizationMemberships.data) {
+    throw new Error("Organization Memberships not found");
+  }
+
+  const userIds = organizationMemberships.data
+    .map((membership) => membership.publicUserData?.userId)
+    .filter((id): id is string => !!id);
+
+  if (!userIds.length) {
+    throw new Error("Users not found");
+  }
+
+  const users = await db.user.findMany({
+    where: {
+      clerkUserId: {
+        in: userIds,
+      },
+    },
+  });
+
+  return users;
+}
