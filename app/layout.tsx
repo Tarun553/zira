@@ -15,6 +15,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "zira",
   description: "Project Management Tool",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({
